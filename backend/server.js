@@ -1,63 +1,46 @@
-const express = require("express");
-const cors = require("cors");
-const { Pool } = require("pg");
+const express = require('express');
+const { Pool } = require('pg');
+const cors = require('cors');
+
 const app = express();
+app.use(cors());
+app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
-// Database connection configuration
+// Configuration PostgreSQL
 const pool = new Pool({
-  host: process.env.DB_HOST || "db",
-  port: process.env.DB_PORT || 5432,
-  user: process.env.DB_USER || "admin",
-  password: process.env.DB_PASSWORD || "secret",
-  database: process.env.DB_NAME || "mydb",
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// MIDDLEWARE CORS
-app.use(cors({
-  origin: [
-    'http://localhost:8080',
-    'http://127.0.0.1:8080',
-    'http://localhost:*',
-    'http://backend'
-  ],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
-}));
-
-// ROUTE API PRINCIPALE
-app.get("/api", (req, res) => {
+// Route /api
+app.get('/api', (req, res) => {
   res.json({
-    message: "Hello from Backend!",
+    message: 'Hello from Backend!',
     timestamp: new Date().toISOString(),
-    client: req.get('Origin') || 'unknown',
     success: true
   });
 });
 
-// ROUTE DATABASE
-app.get("/db", async (req, res) => {
+// Route /db
+app.get('/db', async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query('SELECT * FROM users');
     res.json({
-      message: "Data from Database",
+      message: 'Data from Database',
       data: result.rows,
-      timestamp: new Date().toISOString(),
       success: true
     });
-  } catch (err) {
+  } catch (error) {
     res.status(500).json({
-      message: "Database error",
-      error: err.message,
+      message: 'Database error',
+      error: error.message,
       success: false
     });
   }
 });
 
-// DÉMARRAGE SERVEUR
 app.listen(PORT, () => {
-  console.log(`Backend listening on port ${PORT}`);
-  console.log(`API endpoint: http://localhost:${PORT}/api`);
-  console.log(`DB endpoint: http://localhost:${PORT}/db`);
+  console.log(`Server running on port ${PORT}`);
 });
-// Test modification

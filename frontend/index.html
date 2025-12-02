@@ -10,29 +10,43 @@
   <div class="container">
     <h1>TP Docker Avancé</h1>
     <h2>Frontend Statique</h2>
-    <div id="api-response">Loading API data...</div>
-    <div id="db-response">Loading Database data...</div>
+    <div id="api-response">✅ Frontend déployé avec succès sur Vercel !</div>
+    <div id="db-response">📦 Backend non déployé (version statique)</div>
   </div>
   <script>
-    async function fetchData() {
-      try {
-        // Fetch API status
-        const apiResponse = await fetch('http://localhost:3000/api');
-        if (!apiResponse.ok) throw new Error('API request failed');
-        const apiData = await apiResponse.json();
-        document.getElementById('api-response').innerText = JSON.stringify(apiData, null, 2);
+    // async function fetchData() {
+    //   try {
+    //     // Fetch API status
+    //     const apiResponse = await fetch('http://localhost:3000/api');
+    //     if (!apiResponse.ok) throw new Error('API request failed');
+    //     const apiData = await apiResponse.json();
+    //     document.getElementById('api-response').innerText = JSON.stringify(apiData, null, 2);
+    //     // Fetch database data
+    //     const dbResponse = await fetch('http://localhost:3000/db');
+    //     if (!dbResponse.ok) throw new Error('Database request failed');
+    //     const dbData = await dbResponse.json();
+    //     document.getElementById('db-response').innerText = JSON.stringify(dbData, null, 2);
+    //   } catch (error) {
+    //     document.getElementById('api-response').innerText = `Error: ${error.message}`;
+    //     document.getElementById('db-response').innerText = `Error: ${error.message}`;
+    //   }
+    // }
+    // setTimeout(fetchData, 1000);
 
-        // Fetch database data
-        const dbResponse = await fetch('http://localhost:3000/db');
-        if (!dbResponse.ok) throw new Error('Database request failed');
-        const dbData = await dbResponse.json();
-        document.getElementById('db-response').innerText = JSON.stringify(dbData, null, 2);
-      } catch (error) {
-        document.getElementById('api-response').innerText = `Error: ${error.message}`;
-        document.getElementById('db-response').innerText = `Error: ${error.message}`;
-      }
-    }
-    setTimeout(fetchData, 1000);
+    // Version statique - Pas d'appels API
+    document.getElementById('api-response').innerHTML = `
+      <strong>✅ Frontend Statique Déployé</strong><br>
+      Status: Production<br>
+      Platform: Vercel<br>
+      Date: ${new Date().toLocaleString()}
+    `;
+    
+    document.getElementById('db-response').innerHTML = `
+      <strong>📦 Informations du Projet</strong><br>
+      Projet: TP Docker CI/CD<br>
+      Technologies: Docker, GitHub Actions, Vercel<br>
+      Backend: Non déployé (version démo)
+    `;
   </script>
 </body>
 </html>
